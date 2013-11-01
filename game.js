@@ -2,9 +2,9 @@
 	"use strict";
 
 	$(document).ready(function() {
-		board.reset(24);
+		board.reset(board.level*2);
 		$("#redo").on( "click", function() {
-			board.reset(24);
+			board.reset(board.level*2);
 		});
 	});
 
@@ -50,6 +50,9 @@
 				$(this.rowColId).css('background-image', 'url(' + this.face + ')');
 			}
 		};
+		this.unhide = function() {
+			$(this.rowColId).show(1000);
+		};
 		this.match = function() {
 			this.matched = true;
 			$(this.rowColId).hide(1000);
@@ -60,6 +63,8 @@
 		score: 0,
 		visible: [],
 		size: 10,
+		matchesLeft: 0,
+		level: 1,
 		board: [],
 		create: function(wData) {
 			var rows = 2;	//	Default to 2 rows of cards
@@ -78,6 +83,7 @@
 					length = wData.length;
 				}
 			}
+			this.matchesLeft = length/2;
 			if(length % 3 === 0) {	//	Make 3 rows
 				rows = 3;
 			}
@@ -151,6 +157,17 @@
 					this.visible[0].match();
 					this.visible[1].match();
 					this.visible = [];
+					this.matchesLeft -= 1;
+				}
+			}
+			if(this.matchesLeft < 1) {	//	Done! Show all the cards
+				for(var row = 0; row < this.board.length; row++) {
+					for(var col = 0; col < this.board[0].length; col++){ 
+						this.board[row][col].unhide();    
+					} 
+				}
+				if(this.level < 12) {
+					this.level += 1;
 				}
 			}
 		},
