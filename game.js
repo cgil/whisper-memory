@@ -117,7 +117,6 @@
 			}
 			get(api.latest(this.size/2)).done(function(data){
 				this.visible = [];
-				board.updateScore(0);
 				board.create(data);
 			});
 		},
